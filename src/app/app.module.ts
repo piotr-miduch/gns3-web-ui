@@ -37,6 +37,7 @@ import { ProjectMapComponent } from './components/project-map/project-map.compon
 import { ServersComponent } from './components/servers/servers.component';
 import { AddServerDialogComponent } from './components/servers/add-server-dialog/add-server-dialog.component';
 import { ContextMenuComponent } from './components/project-map/context-menu/context-menu.component';
+import { ContextConsoleMenuComponent } from './components/project-map/context-console-menu/context-console-menu.component';
 import { StartNodeActionComponent } from './components/project-map/context-menu/actions/start-node-action/start-node-action.component';
 import { StopNodeActionComponent } from './components/project-map/context-menu/actions/stop-node-action/stop-node-action.component';
 import { TemplateComponent } from './components/template/template.component';
@@ -226,6 +227,8 @@ import { ConfiguratorDialogVmwareComponent } from './components/project-map/node
 import { ConfiguratorDialogIouComponent } from './components/project-map/node-editors/configurator/iou/configurator-iou.component';
 import { ConfiguratorDialogIosComponent } from './components/project-map/node-editors/configurator/ios/configurator-ios.component';
 import { ConfiguratorDialogDockerComponent } from './components/project-map/node-editors/configurator/docker/configurator-docker.component';
+import { EditNetworkConfigurationDialogComponent } from './components/project-map/node-editors/configurator/docker/edit-network-configuration/edit-network-configuration.component';
+import { ConfigureCustomAdaptersDialogComponent } from './components/project-map/node-editors/configurator/docker/configure-custom-adapters/configure-custom-adapters.component';
 import { ConfiguratorDialogNatComponent } from './components/project-map/node-editors/configurator/nat/configurator-nat.component';
 import { ConfiguratorDialogTracengComponent } from './components/project-map/node-editors/configurator/traceng/configurator-traceng.component';
 import { AddTracengTemplateComponent } from './components/preferences/traceng/add-traceng/add-traceng-template.component';
@@ -249,7 +252,6 @@ import { AlignVerticallyActionComponent } from './components/project-map/context
 import { ConfirmationBottomSheetComponent } from './components/projects/confirmation-bottomsheet/confirmation-bottomsheet.component';
 import { TemplateFilter } from './filters/templateFilter.pipe';
 import { NotificationService } from './services/notification.service';
-import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ConfigDialogComponent } from './components/project-map/context-menu/dialogs/config-dialog/config-dialog.component';
 import { Gns3vmComponent } from './components/preferences/gns3vm/gns3vm.component';
 import { Gns3vmService } from './services/gns3vm.service';
@@ -280,6 +282,8 @@ import { ChangeHostnameDialogComponent } from './components/project-map/change-h
 import { ApplianceInfoDialogComponent } from './components/project-map/new-template-dialog/appliance-info-dialog/appliance-info-dialog.component';
 import { InformationDialogComponent } from './components/dialogs/information-dialog.component';
 import { TemplateNameDialogComponent } from './components/project-map/new-template-dialog/template-name-dialog/template-name-dialog.component';
+import { UpdatesService } from './services/updates.service';
+
 
 @NgModule({
   declarations: [
@@ -296,6 +300,7 @@ import { TemplateNameDialogComponent } from './components/project-map/new-templa
     DefaultLayoutComponent,
     ProgressDialogComponent,
     ContextMenuComponent,
+    ContextConsoleMenuComponent,
     StartNodeActionComponent,
     StopNodeActionComponent,
     TemplateComponent,
@@ -464,7 +469,9 @@ import { TemplateNameDialogComponent } from './components/project-map/new-templa
     ChangeHostnameDialogComponent,
     ApplianceInfoDialogComponent,
     InformationDialogComponent,
-    TemplateNameDialogComponent
+    TemplateNameDialogComponent,
+    ConfigureCustomAdaptersDialogComponent,
+    EditNetworkConfigurationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -485,7 +492,6 @@ import { TemplateNameDialogComponent } from './components/project-map/new-templa
     DragDropModule,
     NgxChildProcessModule,
     MATERIAL_IMPORTS,
-    DeviceDetectorModule.forRoot(),
     NgCircleProgressModule.forRoot()
   ],
   providers: [
@@ -560,7 +566,8 @@ import { TemplateNameDialogComponent } from './components/project-map/new-templa
     ServerResolve,
     ConsoleGuard,
     Title,
-    ApplianceService
+    ApplianceService,
+    UpdatesService
   ],
   entryComponents: [
     AddServerDialogComponent,
@@ -606,7 +613,9 @@ import { TemplateNameDialogComponent } from './components/project-map/new-templa
     AdbutlerComponent,
     NewTemplateDialogComponent,
     ChangeHostnameDialogComponent,
-    ApplianceInfoDialogComponent
+    ApplianceInfoDialogComponent,
+    ConfigureCustomAdaptersDialogComponent,
+    EditNetworkConfigurationDialogComponent
   ],
   bootstrap: [AppComponent]
 })
