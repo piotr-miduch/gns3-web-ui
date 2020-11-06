@@ -14,3 +14,7 @@ export const projectSelector = 'body > app-root > app-default-layout > main > ap
 export const addBlankProjectInputSelector = '#mat-dialog-0 > app-add-blank-project-dialog > form > mat-form-field > div > div.mat-form-field-flex.ng-tns-c149-26 > div';
 export const projectTableSelector = 'body > app-root > app-default-layout > main > app-projects > div > div.default-content > div > mat-table';
 export const confirmRemovingProjectSelector = '#cdk-overlay-6 > mat-bottom-sheet-container > app-confirmation-bottomsheet > div > div:nth-child(2) > button:nth-child(2)';
+
+// project map page
+export const addNodeButtonSelector = 'body > app-root > app-project-map > div.project-map.ng-star-inserted > div.project-toolbar.ng-star-inserted > mat-toolbar > mat-toolbar-row:nth-child(5) > app-template > button';
+export const openDialogToConfigureSelector = '#mat-menu-panel-19 > div > button';
