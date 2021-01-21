@@ -6,7 +6,7 @@ import { MatSort, MatSortable } from '@angular/material/sort';
 
 import { DataSource } from '@angular/cdk/collections';
 
-import { map, switchMap } from 'rxjs//operators';
+import { map, mergeMap, switchMap } from 'rxjs//operators';
 import { BehaviorSubject, Observable, merge } from 'rxjs';
 
 import { Project } from '../../models/project';
@@ -24,6 +24,10 @@ import { ConfirmationBottomSheetComponent } from './confirmation-bottomsheet/con
 import { ToasterService } from '../../services/toaster.service';
 import { ConfigureGns3VMDialogComponent } from '../servers/configure-gns3vm-dialog/configure-gns3vm-dialog.component';
 import { ElectronService } from 'ngx-electron';
+import { Node } from '../../cartography/models/node';
+import { Link } from '../../models/link';
+import { Drawing } from '../../cartography/models/drawing';
+import { NodesDataSource } from '../../cartography/datasources/nodes-datasource';
 
 @Component({
   selector: 'app-projects',
@@ -32,12 +36,19 @@ import { ElectronService } from 'ngx-electron';
 })
 export class ProjectsComponent implements OnInit {
   server: Server;
+  project: Project;
+  symbols: Symbol[] = [];
+  nodes: Node[] = [];
+  links: Link[] = [];
+  drawings: Drawing[] = [];
+
   projectDatabase = new ProjectDatabase();
   dataSource: ProjectDataSource;
   displayedColumns = ['name', 'actions'];
   settings: Settings;
 
   searchText: string = '';
+  projectPreviewEnabled = false;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -50,7 +61,8 @@ export class ProjectsComponent implements OnInit {
     private router: Router,
     private bottomSheet: MatBottomSheet,
     private toasterService: ToasterService,
-    private electronService: ElectronService
+    private electronService: ElectronService,
+    private nodesDataSource: NodesDataSource
   ) {}
 
   ngOnInit() {
@@ -85,6 +97,31 @@ export class ProjectsComponent implements OnInit {
     };
   }
 
+  preview(project: Project) {
+    this.projectService.get(this.server, project.project_id).subscribe((project: Project) => {
+      this.project = project;
+      this.projectService
+      .nodes(this.server, project.project_id)
+      .pipe(
+        mergeMap((nodes: Node[]) => {
+          nodes.forEach((node: Node) => {
+            node.symbol_url = `${this.server.protocol}//${this.server.host}:${this.server.port}/v2/symbols/${node.symbol}/raw`;
+          });
+          this.nodes = nodes;
+          return this.projectService.links(this.server, project.project_id);
+        }),
+        mergeMap((links: Link[]) => {
+          this.links = links;
+          return this.projectService.drawings(this.server, project.project_id);
+        })
+      )
+      .subscribe((drawings: Drawing[]) => {
+        this.drawings = drawings;
+        this.progressService.deactivate();
+      });
+    });
+  }
+
   goToPreferences() {
     this.router.navigate(['/server', this.server.id, 'preferences'])
       .catch(error => this.toasterService.error('Cannot navigate to the preferences'));
@@ -94,6 +131,7 @@ export class ProjectsComponent implements OnInit {
     this.projectService.list(this.server).subscribe(
       (projects: Project[]) => {
         this.projectDatabase.addProjects(projects);
+        if (!this.project && projects.length > 0) this.preview(projects[0]);
       },
       error => {
         this.progressService.setError(error);

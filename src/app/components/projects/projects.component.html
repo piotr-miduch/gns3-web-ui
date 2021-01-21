@@ -40,8 +40,8 @@
       </mat-form-field>
   </form>
 
-  <div class="default-content">
-    <div class="mat-elevation-z8">
+  <div class="wrapper">
+    <div class="mat-elevation-z8 box">
       <mat-table #table [dataSource]="dataSource | projectsfilter: searchText" matSort>
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
@@ -53,6 +53,9 @@
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
           <mat-cell *matCellDef="let row" style="text-align: right">
+            <button mat-icon-button matTooltip="Preview" matTooltipClass="custom-tooltip" (click)="preview(row)">
+              <mat-icon aria-label="Preview">pageview</mat-icon>
+            </button>
             <button mat-icon-button matTooltip="Open project" matTooltipClass="custom-tooltip" (click)="open(row)" *ngIf="row.status == 'closed'">
               <mat-icon aria-label="Open project">play_arrow</mat-icon>
             </button>
@@ -71,6 +74,23 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </mat-table>
+    </div>
+
+    <div class="mat-elevation-z8 box" *ngIf="project" >
+      <div class="map">
+        <app-d3-map
+          [server]="server"
+          [project]="project"
+          [symbols]="symbols"
+          [nodes]="nodes"
+          [links]="links"
+          [drawings]="drawings"
+          [width]="project.scene_width"
+          [height]="project.scene_height"
+          [show-interface-labels]="false"
+          [readonly]="true"
+        ></app-d3-map>
+      </div>
     </div>
   </div>
 </div>

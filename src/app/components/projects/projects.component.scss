@@ -13,3 +13,20 @@
     margin-left: -470px;
     left: 50%;
 }
+
+.map {
+    background-color: white;
+    width: 100;
+    overflow: scroll;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    .box {
+        width: 40%!important;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
