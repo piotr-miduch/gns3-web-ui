@@ -9,9 +9,9 @@
 }
 
 .full-width {
-    width: 940px;
-    margin-left: -470px;
-    left: 50%;
+    width: 90%;
+    margin-right: 5%;
+    margin-left: 5%;
 }
 
 .map {
@@ -28,5 +28,17 @@
         width: 46%!important;
         margin-left: 2%;
         margin-right: 2%;
+    }
+}
+
+.projects-header {
+    margin-right: 5%;
+    margin-left: 5%;
+
+    h1 {
+        font-weight: 300;
+        margin: 0;
+        font-size: 20px;
+        padding: 28px 12px;
     }
 }
