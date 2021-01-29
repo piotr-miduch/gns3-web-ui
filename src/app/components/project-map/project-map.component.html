@@ -187,6 +187,7 @@
 </div>
 
 <div [ngClass]="{lightTheme: isLightThemeEnabled}" class="zoom-buttons">
+  <button matTooltip="Undo" matTooltipClass="custom-tooltip" [ngClass]="{lightTheme: isLightThemeEnabled}" class="zoom-button" (click)="undoAction()"><mat-icon>undo</mat-icon></button>
   <button matTooltip="Zoom in" matTooltipClass="custom-tooltip" [ngClass]="{lightTheme: isLightThemeEnabled}" class="zoom-button" (click)="zoomIn()"><mat-icon>zoom_in</mat-icon></button>
   <button matTooltip="Reset zoom" matTooltipClass="custom-tooltip" [ngClass]="{lightTheme: isLightThemeEnabled}" class="zoom-button" (click)="resetZoom()"><mat-icon>adjust</mat-icon></button>
   <button matTooltip="Zoom out" matTooltipClass="custom-tooltip" [ngClass]="{lightTheme: isLightThemeEnabled}" class="zoom-button" (click)="zoomOut()"><mat-icon>zoom_out</mat-icon></button>

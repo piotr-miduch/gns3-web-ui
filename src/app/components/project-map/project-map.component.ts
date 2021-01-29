@@ -73,6 +73,8 @@ import { Title } from '@angular/platform-browser';
 import { NewTemplateDialogComponent } from './new-template-dialog/new-template-dialog.component';
 import { NodeConsoleService } from '../../services/nodeConsole.service';
 import * as Mousetrap from 'mousetrap';
+import { Store, select } from '@ngrx/store';
+import { UpdateNodes } from 'app/store/action';
 
 
 @Component({
@@ -86,6 +88,7 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
   public links: Link[] = [];
   public drawings: Drawing[] = [];
   public symbols: Symbol[] = [];
+
   public project: Project;
   public server: Server;
   public projectws: WebSocket;
@@ -164,7 +167,8 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private themeService: ThemeService,
     private title: Title,
-    private nodeConsoleService: NodeConsoleService
+    private nodeConsoleService: NodeConsoleService,
+    private store: Store<any>
   ) {}
 
   ngOnInit() {
@@ -183,6 +187,10 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
 
     this.addSubscriptions();
     this.addKeyboardListeners();
+
+    this.store.select('projectState').subscribe((state) => {
+      console.log(state);
+    });
   }
 
   getSettings() {
@@ -206,6 +214,10 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
     this.projectMapSubscription.add(
       this.drawingsDataSource.changes.subscribe((drawings: Drawing[]) => {
         this.drawings = drawings;
+
+        //dispatch action
+        this.store.dispatch({type: 'UPDATE_DRAWINGS', payload: JSON.parse(JSON.stringify(drawings))});
+
         this.mapChangeDetectorRef.detectChanges();
       })
     );
@@ -216,8 +228,11 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
         nodes.forEach((node: Node) => {
           node.symbol_url = `${this.server.protocol}//${this.server.host}:${this.server.port}/v2/symbols/${node.symbol}/raw`;
         });
-
         this.nodes = nodes;
+
+        //dispatch action
+        this.store.dispatch({type: 'UPDATE_NODES', payload: JSON.parse(JSON.stringify(nodes))});
+
         this.mapChangeDetectorRef.detectChanges();
       })
     );
@@ -225,6 +240,10 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
     this.projectMapSubscription.add(
       this.linksDataSource.changes.subscribe((links: Link[]) => {
         this.links = links;
+
+        //dispatch action
+        this.store.dispatch({type: 'UPDATE_LINKS', payload: JSON.parse(JSON.stringify(links))});
+
         this.mapChangeDetectorRef.detectChanges();
       })
     );
@@ -350,6 +369,14 @@ export class ProjectMapComponent implements OnInit, OnDestroy {
           });
         });
     });
+
+    Mousetrap.bind('ctr+shift+u', (event: Event) => {
+      this.undoAction();
+    });
+  }
+
+  undoAction() {
+    console.log('should call undo action in store');
   }
 
   onProjectLoad(project: Project) {

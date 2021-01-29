@@ -281,7 +281,8 @@ import { ApplianceInfoDialogComponent } from './components/project-map/new-templ
 import { InformationDialogComponent } from './components/dialogs/information-dialog.component';
 import { TemplateNameDialogComponent } from './components/project-map/new-template-dialog/template-name-dialog/template-name-dialog.component';
 import { UpdatesService } from './services/updates.service';
-
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './store/reducer'; 
 
 @NgModule({
   declarations: [
@@ -488,7 +489,8 @@ import { UpdatesService } from './services/updates.service';
     DragDropModule,
     NgxChildProcessModule,
     MATERIAL_IMPORTS,
-    NgCircleProgressModule.forRoot()
+    NgCircleProgressModule.forRoot(),
+    StoreModule.forRoot({projectState: reducer})
   ],
   providers: [
     SettingsService,
