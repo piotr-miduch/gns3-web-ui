@@ -114,6 +114,6 @@ export class WebConsoleFullWindowComponent implements OnInit {
                 protocol = "wss://"
         }
         
-	return `${protocol}://${this.server.host}:${this.server.port}/v2/projects/${this.projectId}/nodes/${this.nodeId}/console/ws`
+	return `${protocol}${this.server.host}:${this.server.port}/v2/projects/${this.projectId}/nodes/${this.nodeId}/console/ws`
     }
 }
